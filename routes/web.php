@@ -23,6 +23,8 @@ Route::get('/basicShow', function () {
     return view('basicShow', ['posts' => Post::get()]);
 });
 
-Route::get('/basicForm', [basicFormController::class, 'createForm']);
+Route::get('/createForm', [basicFormController::class, 'createForm']);
+Route::post('/createForm', [basicFormController::class, 'processCreateForm']);
 
-Route::post('/basicForm', [basicFormController::class, 'process']);
+Route::get('/editForm', [basicFormController::class, 'editForm']);
+Route::put('/editForm', [basicFormController::class, 'processEditForm']);

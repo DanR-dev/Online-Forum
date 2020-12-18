@@ -1,4 +1,4 @@
-<form method = "POST" action = "/basicForm">
+<form method = "POST" action = "/createForm">
     @csrf
     <label for="title">Role Title</label>
     <input id="title" name="title" type="text" class="@error('title') is-invalid @enderror">
