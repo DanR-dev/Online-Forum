@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
+use App\Http\Controllers\basicFormController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,7 @@ Route::get('/', function () {
 Route::get('/basicShow', function () {
     return view('basicShow', ['posts' => Post::get()]);
 });
+
+Route::get('/basicForm', [basicFormController::class, 'createForm']);
+
+Route::post('/basicForm', [basicFormController::class, 'process']);

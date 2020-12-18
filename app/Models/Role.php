@@ -13,4 +13,12 @@ class Role extends Model
     {
         return $this->belongsToMany('App\Models\Profile');
     }
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'title',
+    ];
 }
