@@ -8,7 +8,7 @@ use App\Models\Role;
 class basicFormController extends Controller
 {
     public function createForm(Request $request) {
-        return view('components/basicInputForm');
+        return view('basicInputForm');
     }
     
     public function processCreateForm(Request $request) {
@@ -26,7 +26,7 @@ class basicFormController extends Controller
 
     
     public function editForm(Request $request) {
-        return view('components/basicEditForm');
+        return view('basicEditForm');
     }
     
     public function processEditForm(Request $request) {

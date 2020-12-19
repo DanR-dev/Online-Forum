@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Http\Controllers\basicFormController;
+use App\Http\Controllers\loginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,9 @@ Route::post('/createForm', [basicFormController::class, 'processCreateForm']);
 
 Route::get('/editForm', [basicFormController::class, 'editForm']);
 Route::put('/editForm', [basicFormController::class, 'processEditForm']);
+
+Route::get('/login', function()
+{
+    return view('loginForm');
+});
+Route::post('/login', [loginController::class, 'authenticate']);

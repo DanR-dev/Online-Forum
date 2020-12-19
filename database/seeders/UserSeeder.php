@@ -16,7 +16,6 @@ class UserSeeder extends Seeder
     public function run()
     {
         $userA = new User;
-        $userA->name = 'Alex';
         $userA->email = 'Alex@email.com';
         $userA->email_verified_at = now();
         $userA->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
@@ -24,7 +23,6 @@ class UserSeeder extends Seeder
         $userA->save();
         
         $userB = new User;
-        $userB->name = 'Bob';
         $userB->email = 'Bob@email.com';
         $userB->email_verified_at = now();
         $userB->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
