@@ -30,8 +30,5 @@ Route::post('/createForm', [basicFormController::class, 'processCreateForm']);
 Route::get('/editForm', [basicFormController::class, 'editForm']);
 Route::put('/editForm', [basicFormController::class, 'processEditForm']);
 
-Route::get('/login', function()
-{
-    return view('loginForm');
-});
-Route::post('/login', [loginController::class, 'authenticate']);
+Route::get('/login', [loginController::class, 'getLoginForm'])->withoutMiddleware(App\Http\Middleware\Authenticate::class)->name('login');
+Route::post('/login', [loginController::class, 'processLogin'])->withoutMiddleware(App\Http\Middleware\Authenticate::class);

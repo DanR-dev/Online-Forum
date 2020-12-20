@@ -5,7 +5,11 @@
     <div><label for="password">Password</label></div>
     <div><input id="password" name="password" type="password"></div>
 
+    @if($loggedIn == True)
+    <div><input type="submit" name="mode" value="logout" class="btn btn-dark btn-block"></div>
+    @else
     <div><input type="submit" name="mode" value="login" class="btn btn-dark btn-block"></div>
+    @endif
 
     @if ($errors->any())
     <div class="alert alert-danger">
