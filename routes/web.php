@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Http\Controllers\basicFormController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\postsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +21,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/basicShow', function () {
-    return view('basicShow', ['posts' => Post::get()]);
+Route::get('/posts', function () {
+    return view('posts', ['posts' => Post::get(), 'loggedIn' => Auth::check()]);
 });
+Route::post('/posts', [postsController::class, 'getPosts']);
 
 Route::get('/createForm', [basicFormController::class, 'createForm']);
 Route::post('/createForm', [basicFormController::class, 'processCreateForm']);
