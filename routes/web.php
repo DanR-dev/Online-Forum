@@ -29,3 +29,9 @@ Route::post('/createForm', [basicFormController::class, 'processCreateForm']);
 
 Route::get('/editForm', [basicFormController::class, 'editForm']);
 Route::put('/editForm', [basicFormController::class, 'processEditForm']);
+
+Route::get('/login', function()
+{
+    return view('loginForm');
+});
+Route::post('/login', [loginController::class, 'authenticate']);
