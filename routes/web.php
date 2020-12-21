@@ -21,9 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/posts', function () {
-    return view('posts', ['posts' => Post::get(), 'loggedIn' => Auth::check()]);
-});
+Route::get('/posts', [postsController::class, 'getPosts']);
 Route::post('/posts', [postsController::class, 'getPosts']);
 
 Route::get('/createForm', [basicFormController::class, 'createForm']);

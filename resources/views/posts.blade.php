@@ -18,16 +18,39 @@
         posts
     </x-slot>
     <x-slot name="content">
+        <script>
+            focusId = "";
+
+            function placeCommentableOptions(commentableId, authorId) {
+                if(focusId != commentableId){
+                    readerId = {{$user->profile->id}};
+                    if (focusId != "") {
+                        document.getElementById(focusId).innerHTML = "";
+                    }
+                    comp = "Reply";
+                    if(authorId == readerId){
+                        comp += "   Edit   Delete";
+                    }
+                    document.getElementById(commentableId).innerHTML = comp;
+                    focusId = commentableId;
+                } else{
+                    document.getElementById(focusId).innerHTML = "";
+                    focusId = "";
+                }
+            }
+
+        </script>
         @foreach ($posts as $post)
-            <div>
-                <h3>{{ $post->title }}</h3>
-                <i>{{ $post->profile->name }}</i> :
-                <br>{{ $post->content }}
+            <div onclick="placeCommentableOptions('post{{ $post->id }}', '{{ $post->profile->id}}')">
+                <h3><i>{{ $post->profile->name }}</i> : {{ $post->title }}</h3>
+                {{ $post->content }}
+                <p id="post{{ $post->id }}"></p>
+            </div>
 
                 @include('components/commentsOf', ['commentable' => $post])
-            </div>
         @endforeach
     </x-slot>
 </x-contentLayout>
+
 
 </html>

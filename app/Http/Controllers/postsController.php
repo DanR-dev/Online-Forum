@@ -12,13 +12,13 @@ class postsController extends Controller
     public function getPosts(Request $request){
         $searchName = $request->only('searchName');
 
-        $searchTarget = Profile::where('name', $searchName);
-        if($searchTarget->count() > 0){
-            $posts = Post::where('profile_id', $searchTarget->first()->id)->get();
-        }else{
+        try{
+            $posts = Post::where('profile_id', Profile::where('name', $searchName)->first()->id)->get();
+        }
+        catch(\Exception $q){
             $posts = Post::get();
         }
 
-        return view('posts', ['posts' => $posts, 'loggedIn' => Auth::check()]);
+        return view('posts', ['posts' => $posts, 'loggedIn' => Auth::check(), 'user' => Auth::user()]);
     }
 }
