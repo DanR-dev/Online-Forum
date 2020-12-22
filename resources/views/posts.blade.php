@@ -7,9 +7,15 @@
     <x-slot name="specificHeader">
         <form method="POST" action="/posts">
             @csrf
-            <input id="searchName" type="Search" name="searchName" class="@error('title') is-invalid @enderror">
-            <input type="Submit" name="search" value="Search" class="btn btn-dark btn-block">
+            <p>
+                <input id="searchName" type="Search" name="searchName" class="@error('title') is-invalid @enderror">
+                <input type="Submit" name="search" value="Search by author" class="btn btn-dark btn-block">
+            </p>
         </form>
+        <p>
+            Pages:
+            {{ $posts->links('pagination::bootstrap-4') }}
+        </p>
     </x-slot>
     <x-slot name="loggedIn">
         {{ $loggedIn }}

@@ -5,6 +5,7 @@ use App\Models\Post;
 use App\Http\Controllers\basicFormController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\postsController;
+use App\Http\Controllers\commentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ use App\Http\Controllers\postsController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 Route::get('/posts', [postsController::class, 'getPosts']);
 Route::post('/posts', [postsController::class, 'getPosts']);

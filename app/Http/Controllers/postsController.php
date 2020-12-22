@@ -10,13 +10,12 @@ use Illuminate\Support\Facades\Auth;
 class postsController extends Controller
 {
     public function getPosts(Request $request){
-        $searchName = $request->only('searchName');
-
         try{
-            $posts = Post::where('profile_id', Profile::where('name', $searchName)->first()->id)->get();
+            $searchName = $request->only('searchName');
+            $posts = Post::where('profile_id', Profile::where('name', $searchName)->first()->id)->paginate(10);
         }
         catch(\Exception $q){
-            $posts = Post::get();
+            $posts = Post::paginate(10);
         }
 
         return view('posts', ['posts' => $posts, 'loggedIn' => Auth::check(), 'user' => Auth::user()]);
