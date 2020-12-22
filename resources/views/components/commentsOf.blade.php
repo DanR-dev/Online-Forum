@@ -4,7 +4,7 @@
 <body>
     <ul type="circle">
         @foreach ($commentable->comments as $comment)
-            <li onclick="placeCommentableOptions('comment{{ $comment->id }}', '{{ $comment->profile->id }}')">
+            <li onclick="placeCommentOptions('comment{{ $comment->id }}', '{{ $comment->profile->id }}', '{{ $comment->content }}')">
                 <i>{{ $comment->profile->name }}</i> : {{ $comment->content }}
             </li>
             <p id="comment{{ $comment->id }}"></p>

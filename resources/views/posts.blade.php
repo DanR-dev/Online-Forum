@@ -25,24 +25,67 @@
             readerId = {{$user->profile->id}};
             readerAuth = "{{$user->profile->auth}}";
 
-            function placeCommentableOptions(commentableId, authorId) {
-                if(focusId != commentableId){
+            function placePostOptions(postId, authorId, title, content) {
+                if(focusId != postId){
                     if (focusId != "") {
                         document.getElementById(focusId).innerHTML = "";
                     }
-                    comp = "Reply ";
+                    comp = "<a onclick=placeCommentInput('"+postId+"')>Reply</a> ";
                     if(authorId == readerId){
-                        comp += " Edit ";
+                        comp += `<a onclick="placeEditPostInput('`+postId+`', '`+title+`', '`+content+`')">Edit</a> `;
                     }
                     if(authorId == readerId || readerAuth == 'admin'){
                         comp += " Delete ";
                     }
-                    document.getElementById(commentableId).innerHTML = comp;
-                    focusId = commentableId;
+                    document.getElementById(postId).innerHTML = comp;
+                    focusId = postId;
                 } else{
                     document.getElementById(focusId).innerHTML = "";
                     focusId = "";
                 }
+            }
+
+            function placeCommentOptions(commentId, authorId, content) {
+                if(focusId != commentId){
+                    if (focusId != "") {
+                        document.getElementById(focusId).innerHTML = "";
+                    }
+                    comp = "<a onclick=placeCommentInput('"+commentId+"')>Reply</a> ";
+                    if(authorId == readerId){
+                        comp += `<a onclick="placeEditCommentInput('`+commentId+`', '`+content+`')">Edit</a> `;
+                    }
+                    if(authorId == readerId || readerAuth == 'admin'){
+                        comp += gendeleteButton(commentableId);
+                    }
+                    document.getElementById(commentId).innerHTML = comp;
+                    focusId = commentId;
+                } else{
+                    document.getElementById(focusId).innerHTML = "";
+                    focusId = "";
+                }
+            }
+
+            function placeCommentInput(commentableId){
+                document.getElementById(commentableId).innerHTML = 
+                "<input type='text'></input>"
+                +"<input type='submit' value='Reply'></input>";
+            }
+
+            function genDeleteButton(commentableId){
+                return "<input type='submit' value='Delete'></input>";
+            }
+
+            function placeEditCommentInput(commentableId, content){
+                document.getElementById(commentableId).innerHTML = 
+                "<input type='text' value='"+content+"'></input>"
+                +"<input type='submit' value='Edit'></input>";
+            }
+
+            function placeEditPostInput(commentableId, title, content){
+                document.getElementById(commentableId).innerHTML = 
+                "<input type='text' value='"+title+"'></input>"
+                +"<input type='text' value='"+content+"'></input>"
+                +"<input type='submit' value='Edit'></input>";
             }
 
         </script>
@@ -53,11 +96,11 @@
         </p>
     
         @foreach ($posts as $post)
-            <div onclick="placeCommentableOptions('post{{ $post->id }}', '{{ $post->profile->id}}')">
+            <div onclick="placePostOptions('post{{ $post->id }}', '{{ $post->profile->id}}', '{{ $post->title}}', '{{ $post->content}}')">
                 <h3><i>{{ $post->profile->name }}</i> : {{ $post->title }}</h3>
                 {{ $post->content }}
-                <p id="post{{ $post->id }}"></p>
             </div>
+                <p id="post{{ $post->id }}"></p>
 
                 @include('components/commentsOf', ['commentable' => $post])
         @endforeach
