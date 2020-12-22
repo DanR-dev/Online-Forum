@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html>
 <x-contentLayout>
-    <x-slot name="title">
-        Posts and comments and stuff
-    </x-slot>
     <x-slot name="specificHeader">
         <form method="POST" action="/posts">
             @csrf
@@ -12,10 +9,9 @@
                 <input type="Submit" name="search" value="Search by author" class="btn btn-dark btn-block">
             </p>
         </form>
-        <p>
-            Pages:
-            {{ $posts->links('pagination::bootstrap-4') }}
-        </p>
+    </x-slot>
+    <x-slot name="title">
+        Posts and comments and stuff
     </x-slot>
     <x-slot name="loggedIn">
         {{ $loggedIn }}
@@ -26,16 +22,20 @@
     <x-slot name="content">
         <script>
             focusId = "";
+            readerId = {{$user->profile->id}};
+            readerAuth = "{{$user->profile->auth}}";
 
             function placeCommentableOptions(commentableId, authorId) {
                 if(focusId != commentableId){
-                    readerId = {{$user->profile->id}};
                     if (focusId != "") {
                         document.getElementById(focusId).innerHTML = "";
                     }
-                    comp = "Reply";
+                    comp = "Reply ";
                     if(authorId == readerId){
-                        comp += "   Edit   Delete";
+                        comp += " Edit ";
+                    }
+                    if(authorId == readerId || readerAuth == 'admin'){
+                        comp += " Delete ";
                     }
                     document.getElementById(commentableId).innerHTML = comp;
                     focusId = commentableId;
@@ -46,6 +46,12 @@
             }
 
         </script>
+
+        <p>
+            Pages:
+            {{ $posts->links('pagination::bootstrap-4') }}
+        </p>
+    
         @foreach ($posts as $post)
             <div onclick="placeCommentableOptions('post{{ $post->id }}', '{{ $post->profile->id}}')">
                 <h3><i>{{ $post->profile->name }}</i> : {{ $post->title }}</h3>
@@ -55,8 +61,12 @@
 
                 @include('components/commentsOf', ['commentable' => $post])
         @endforeach
+
+        <p>
+            Pages:
+            {{ $posts->links('pagination::bootstrap-4') }}
+        </p>
     </x-slot>
 </x-contentLayout>
-
 
 </html>

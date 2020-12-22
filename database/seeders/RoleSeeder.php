@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $role = new Role;
-        $role->title = 'Geek';
+        $role->title = 'Moral support';
         $role->save();
         $role = new Role;
         $role->title = 'Karate master';
@@ -24,7 +24,7 @@ class RoleSeeder extends Seeder
         $role->title = 'Project manager';
         $role->save();
         $role = new Role;
-        $role->title = 'Bully';
+        $role->title = 'Spiritual guide';
         $role->save();
     }
 }

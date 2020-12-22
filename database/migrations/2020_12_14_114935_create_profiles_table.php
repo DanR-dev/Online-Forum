@@ -17,6 +17,7 @@ class CreateProfilesTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
+            $table->enum('auth', ['user', 'admin'])->default('user');
             $table->string('avatarPath')->nullable();
             $table->foreignId('user_id')->contrained()->onDelete('cascade')->onUpdate('cascade'); //authenticated user
         });

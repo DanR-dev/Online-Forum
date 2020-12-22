@@ -18,10 +18,7 @@ use App\Http\Controllers\commentController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::redirect('/','/posts');
 
 Route::get('/posts', [postsController::class, 'getPosts']);
 Route::post('/posts', [postsController::class, 'getPosts']);

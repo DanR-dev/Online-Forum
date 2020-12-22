@@ -25,6 +25,7 @@ class ProfileSeeder extends Seeder
         $profileA = new Profile;
         $profileA->name = 'Alex';
         $profileA->user_id = $userA->id;
+        $profileA->auth = 'admin';
         $profileA->save();
         $profileA->roles()->attach($roleA);
         $profileA->roles()->attach($roleB);
