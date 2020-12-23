@@ -20,4 +20,12 @@ class postsController extends Controller
 
         return view('posts', ['posts' => $posts, 'loggedIn' => Auth::check(), 'user' => Auth::user()]);
     }
+
+    public function editPost(Request $request){
+        return $request->postId .">". $request->title .">". $request->content;
+    }
+
+    public function deletePost(Request $request){
+        return $request;
+    }
 }

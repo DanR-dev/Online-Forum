@@ -2,15 +2,12 @@
 <html>
 
 <body>
-    <ul type="circle">
         @foreach ($commentable->comments as $comment)
-            <li onclick="placeCommentOptions('comment{{ $comment->id }}', '{{ $comment->profile->id }}', '{{ $comment->content }}')">
-                <i>{{ $comment->profile->name }}</i> : {{ $comment->content }}
-            </li>
-            <p id="comment{{ $comment->id }}"></p>
-            @include('components/commentsOf', ['commentable' => $comment])
+            <script>document.write(genComment({{$comment->id}}, {{$comment->profile->id}}, "{{$comment->profile->name}}", "{{$comment->content}}"));</script>
+            <ul id="commentsoncomment{{$comment->id}}" type="circle">
+                @include('components/commentsOf', ['commentable' => $comment])
+            </ul>
         @endforeach
-    </ul>
 </body>
 
 </html>

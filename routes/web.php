@@ -19,9 +19,10 @@ use App\Http\Controllers\commentController;
 */
 
 Route::redirect('/','/posts');
-
 Route::get('/posts', [postsController::class, 'getPosts']);
 Route::post('/posts', [postsController::class, 'getPosts']);
+Route::post('/posts/edit', [postsController::class, 'editPost']);
+Route::post('/posts/delete', [postsController::class, 'deletePost']);
 
 Route::get('/createForm', [basicFormController::class, 'createForm']);
 Route::post('/createForm', [basicFormController::class, 'processCreateForm']);
