@@ -269,7 +269,7 @@
             <form id="createpost" action="javascript:void(0);" onsubmit="createPost()">
                 <p>Title</p>
                 <input name="title" type="text"></input>
-                <p>Content:<p>
+                <p>Content:</p>
                 <input name="content" type="text"></input>
                 <input type="submit"></input>
             </form>

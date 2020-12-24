@@ -30,6 +30,19 @@ class PostController extends Controller
     }
 
     public function createPost(Request $request){
-        return "99>". $request->title .">". $request->content;
+        $this->validate($request, [
+            'title' => 'required',
+            'content' => 'required',
+            Auth::check() => 'True',
+        ]);
+        $title = strip_tags($request->title);
+        $content = strip_tags($request->content);
+
+        $post = new Post;
+        $post->title = $title;
+        $post->content = $content;
+        $post->profile_id = Auth::user()->profile->id;
+        $post->save();
+        return $post->id.">". $post->title .">". $post->content;
     }
 }
