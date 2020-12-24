@@ -7,7 +7,7 @@ use App\Models\Post;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
 
-class postsController extends Controller
+class PostController extends Controller
 {
     public function getPosts(Request $request){
         try{
@@ -26,6 +26,10 @@ class postsController extends Controller
     }
 
     public function deletePost(Request $request){
-        return $request;
+        return "True";
+    }
+
+    public function createPost(Request $request){
+        return "99>". $request->title .">". $request->content;
     }
 }

@@ -76,8 +76,8 @@
 
             function placeCommentOnPostInput(postId){
                 document.getElementById("optionspost"+postId).innerHTML = 
-                `<form id=formcomment`+postId+` action='javascript:void(0);' onsubmit="createCommentOnPost('`+postId+`')">`
-                +`<input type='text'></input>`
+                `<form id=formpost`+postId+` action='javascript:void(0);' onsubmit="createCommentOnPost('`+postId+`')">`
+                +`<input type='text' name='content'></input>`
                 +`<input type='submit' value='Reply'></input>`
                 +`</form>`;
             }
@@ -85,7 +85,7 @@
             function placeCommentOnCommentInput(commentId){
                 document.getElementById("optionscomment"+commentId).innerHTML = 
                 `<form id=formcomment`+commentId+` action='javascript:void(0);'  onsubmit="createCommentOnComment('`+commentId+`')">`
-                +`<input type='text'></input>`
+                +`<input type='text' name='content'></input>`
                 +`<input type='submit' value='Reply'></input>`
                 +`</form>`;
             }
@@ -93,7 +93,7 @@
             function placeEditCommentInput(commentId, content){
                 document.getElementById("optionscomment"+commentId).innerHTML = 
                 `<form id=formcomment`+commentId+` action='javascript:void(0);' onsubmit="editComment('`+commentId+`')">`
-                +"<input type='text' value='"+content+"'></input>"
+                +"<input type='text' name='content' value='"+content+"'></input>"
                 +"<input type='submit' value='Edit'></input>"
                 +"</form>";
             }
@@ -125,6 +125,118 @@
                 return false;
             }
 
+            function editComment(commentId){
+                var xhttp = new XMLHttpRequest();
+                var form = new FormData(document.getElementById("formcomment"+commentId));
+                form.append("commentId", commentId);
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        responses = this.responseText.split(">");
+                        document.getElementById("comment"+commentId).outerHTML = genComment(responses[0], readerId, readerName, responses[1]);
+                        document.getElementById(focusId).innerHTML = "";
+                        focusId = "";
+                    }
+                };
+                xhttp.open("POST", "comments/edit", true);
+                xhttp.setRequestHeader("X-Csrf-Token", document.getElementsByName("_token")[0].value);
+                xhttp.send(form);
+                return false;
+            }
+
+            function deletePost(postId){
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if(this.responseText == 'True'){
+                            document.getElementById("post"+postId).outerHTML = null;
+                            document.getElementById("commentsonpost"+postId).outerHTML = null;
+                        } else{
+                            document.write("delete error occured");
+                            document.getElementById(focusId).innerHTML = "";
+                        }
+                        focusId = "";
+                    }
+                };
+                xhttp.open("POST", "posts/delete", true);
+                xhttp.setRequestHeader("X-Csrf-Token", document.getElementsByName("_token")[0].value);
+                xhttp.send(postId);
+                return false;
+            }
+
+            function deleteComment(commentId){
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if(this.responseText == 'True'){
+                            document.getElementById("comment"+commentId).outerHTML = null;
+                            document.getElementById("commentsoncomment"+commentId).outerHTML = null;
+                        } else{
+                            document.write("delete error occured");
+                            document.getElementById(focusId).innerHTML = "";
+                        }
+                        focusId = "";
+                    }
+                };
+                xhttp.open("POST", "comments/delete", true);
+                xhttp.setRequestHeader("X-Csrf-Token", document.getElementsByName("_token")[0].value);
+                xhttp.send(commentId);
+                return false;
+            }
+
+            function createCommentOnPost(postId){
+                var xhttp = new XMLHttpRequest();
+                var form = new FormData(document.getElementById("formpost"+postId));
+                form.append("postId", postId);
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        responses = this.responseText.split(">");
+                        document.getElementById("commentsonpost"+postId).innerHTML = genComment(responses[0], readerId, readerName, responses[1])
+                        + document.getElementById("commentsonpost"+postId).innerHTML;
+                        document.getElementById(focusId).innerHTML = "";
+                        focusId = "";
+                    }
+                };
+                xhttp.open("POST", "comments/create", true);
+                xhttp.setRequestHeader("X-Csrf-Token", document.getElementsByName("_token")[0].value);
+                xhttp.send(form);
+                return false;
+            }
+
+            function createCommentOnComment(commentId){
+                var xhttp = new XMLHttpRequest();
+                var form = new FormData(document.getElementById("formcomment"+commentId));
+                form.append("commentId", commentId);
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        responses = this.responseText.split(">");
+                        document.getElementById("commentsoncomment"+commentId).innerHTML = genComment(responses[0], readerId, readerName, responses[1])
+                        + document.getElementById("commentsoncomment"+commentId).innerHTML;
+                        document.getElementById(focusId).innerHTML = "";
+                        focusId = "";
+                    }
+                };
+                xhttp.open("POST", "comments/create", true);
+                xhttp.setRequestHeader("X-Csrf-Token", document.getElementsByName("_token")[0].value);
+                xhttp.send(form);
+                return false;
+            }
+
+            function createPost(){
+                var xhttp = new XMLHttpRequest();
+                var form = new FormData(document.getElementById("createpost"));
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        responses = this.responseText.split(">");
+                        document.getElementById("posts").innerHTML = genPost(responses[0], readerId, readerName, responses[1], responses[2])
+                        + document.getElementById("posts").innerHTML;
+                    }
+                };
+                xhttp.open("POST", "posts/create", true);
+                xhttp.setRequestHeader("X-Csrf-Token", document.getElementsByName("_token")[0].value);
+                xhttp.send(form);
+                return false;
+            }
+
             function genPost(postId, authorId, authorName, title, content){
                 return `<a id="post`+postId+`">`
                 +`<div onclick="placePostOptions('`+postId+`', '`+authorId+`', '`+title+`', '`+content+`')">`
@@ -142,7 +254,7 @@
                 +`<i>`+authorName+`</i> : `+content
                 +`</li>`
                 +`</p>`
-                +`<a id="optionscomment`+commentId+`"></a>`
+                +`<p id="optionscomment`+commentId+`"></p>`
                 +`</a>`;
             }
         </script>
@@ -151,10 +263,23 @@
             Pages:
             {{ $posts->links('pagination::bootstrap-4') }}
         </p>
+
+        <div>
+            <h3>Write a new post:</h3>
+            <form id="createpost" action="javascript:void(0);" onsubmit="createPost()">
+                <p>Title</p>
+                <input name="title" type="text"></input>
+                <p>Content:<p>
+                <input name="content" type="text"></input>
+                <input type="submit"></input>
+            </form>
+        </div>
     
+        <a id="posts">
         @foreach ($posts as $post)
             @include('components/post', ['post' => $post])
         @endforeach
+        </a>
 
         <p>
             Pages:

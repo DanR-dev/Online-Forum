@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Http\Controllers\basicFormController;
 use App\Http\Controllers\loginController;
-use App\Http\Controllers\postsController;
-use App\Http\Controllers\commentController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +19,16 @@ use App\Http\Controllers\commentController;
 */
 
 Route::redirect('/','/posts');
-Route::get('/posts', [postsController::class, 'getPosts']);
-Route::post('/posts', [postsController::class, 'getPosts']);
-Route::post('/posts/edit', [postsController::class, 'editPost']);
-Route::post('/posts/delete', [postsController::class, 'deletePost']);
+Route::get('/posts', [PostController::class, 'getPosts']);
+Route::post('/posts', [PostController::class, 'getPosts']);
+
+Route::post('/posts/edit', [PostController::class, 'editPost']);
+Route::post('/posts/delete', [PostController::class, 'deletePost']);
+Route::post('/posts/create', [PostController::class, 'createPost']);
+
+Route::post('/comments/edit', [CommentController::class, 'editComment']);
+Route::post('/comments/delete', [CommentController::class, 'deleteComment']);
+Route::post('/comments/create', [CommentController::class, 'createComment']);
 
 Route::get('/createForm', [basicFormController::class, 'createForm']);
 Route::post('/createForm', [basicFormController::class, 'processCreateForm']);
