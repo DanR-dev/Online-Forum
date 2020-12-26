@@ -21,6 +21,13 @@ class PostSeeder extends Seeder
         $post->content = '2 + 2 = 5';
         $post->profile_id = $profile->id;
         $post->save();
+        
+        $profile = Profile::find(2);
+        $post = new Post;
+        $post->title = 'science';
+        $post->content = 'what goes up must come down';
+        $post->profile_id = $profile->id;
+        $post->save();
 
         Post::factory(50)->create();
     }

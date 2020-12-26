@@ -14,7 +14,7 @@ class PostController extends Controller
             $searchName = $request->only('searchName');
             $posts = Post::where('profile_id', Profile::where('name', $searchName)->first()->id)->paginate(10);
         }
-        catch(\Exception $q){
+        catch(\Exception $e){
             $posts = Post::paginate(10);
         }
 
@@ -22,25 +22,75 @@ class PostController extends Controller
     }
 
     public function editPost(Request $request){
-        return $request->postId .">". $request->title .">". $request->content;
+        try{
+            $request->request->add(['id' => strip_tags($request->post_id)]);
+            $request->request->remove('post_id');
+            $request->request->add(['title' => strip_tags($request->title)]);
+            $request->request->add(['content' => strip_tags($request->content)]);            
+
+            $this->validate($request, [
+                'id' => 'exists:posts',
+                'title' => 'required',
+                'content' => 'required',
+            ]);
+
+            $profile = Auth::user()->profile;
+            $post = Post::where('id', $request->request->get('id'))->first();
+            $author = $post->profile;
+            $request->request->add(['authorised' => ($profile->auth == 'admin' || $profile == $author)]);
+            
+            $this->validate($request, [
+                'authorised' => 'accepted',
+            ]);
+
+            $post->title = $request->request->get('title');
+            $post->content = $request->request->get('content');
+            $post->save();
+            return $post->id.">". $post->title .">". $post->content;
+
+        }catch(\Exception $e){}
     }
 
     public function deletePost(Request $request){
-        return "True";
+        try{
+            $request->request->add(['id' => strip_tags($request->post_id)]);
+            $request->request->remove('post_id');
+
+            $this->validate($request, [
+                'id' => 'exists:posts',
+            ]);
+
+            $profile = Auth::user()->profile;
+            $post = Post::where('id', $request->request->get('id'))->first();
+            $author = $post->profile;
+            $request->request->add(['authorised' => ($profile->auth == 'admin' || $profile == $author)]);
+            
+            $this->validate($request, [
+                'authorised' => 'accepted',
+            ]);
+
+            $post->delete();
+            return "True";
+
+        }catch(\Exception $e){
+            
+        }
     }
 
     public function createPost(Request $request){
+        $request->request->add(['title' => strip_tags($request->title)]);
+        $request->request->add(['content' => strip_tags($request->content)]);
+        $request->request->add(['authorised' => Auth::check()]);
+
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
-            Auth::check() => 'True',
+            'authorised' => 'accepted',
         ]);
-        $title = strip_tags($request->title);
-        $content = strip_tags($request->content);
 
         $post = new Post;
-        $post->title = $title;
-        $post->content = $content;
+        $post->title = $request->request->get('title');
+        $post->content = $request->request->get('content');
         $post->profile_id = Auth::user()->profile->id;
         $post->save();
         return $post->id.">". $post->title .">". $post->content;
