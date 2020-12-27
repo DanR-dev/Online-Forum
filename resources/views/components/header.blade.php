@@ -3,7 +3,7 @@
 
 <body>
     @if ($loggedIn)
-        <button onclick="window.location.href='http://coursework2.test/login';">Switch Account</button>
+        <button onclick="window.location.href='http://coursework2.test/login';">Account options</button>
     @endif
 </body>
 

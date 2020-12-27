@@ -6,6 +6,7 @@ use App\Http\Controllers\basicFormController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,5 @@ Route::put('/editForm', [basicFormController::class, 'processEditForm']);
 
 Route::get('/login', [loginController::class, 'getLoginForm'])->withoutMiddleware(App\Http\Middleware\Authenticate::class)->name('login');
 Route::post('/login', [loginController::class, 'processLogin'])->withoutMiddleware(App\Http\Middleware\Authenticate::class);
+Route::post('/logout', [loginController::class, 'processLogout']);
+Route::post('/avatar/set', [ProfileController::class, 'setAvatar']);
