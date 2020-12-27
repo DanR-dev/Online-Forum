@@ -252,7 +252,9 @@
             function genPost(postId, authorId, authorName, title, content){
                 return `<a id="post`+postId+`">`
                 +`<div onclick="placePostOptions('`+postId+`', '`+authorId+`', '`+title+`', '`+content+`')">`
-                +`<h3><i>`+authorName+`</i> : `+title+`</h3>`
+                +`<h3>`
+                +getAvatar(authorId)
+                +`<i>`+authorName+`</i> : `+title+`</h3>`
                 +content
                 +`</div>`
                 +`<p id="optionspost`+postId+`"></p>`
@@ -263,11 +265,18 @@
                 return `<a id=comment`+commentId+`>`
                 +`<p>`
                 +`<li onclick="placeCommentOptions('`+commentId+`', '`+authorId+`', '`+content+`')">`
+                +getAvatar(authorId)
                 +`<i>`+authorName+`</i> : `+content
                 +`</li>`
                 +`</p>`
                 +`<p id="optionscomment`+commentId+`"></p>`
                 +`</a>`;
+            }
+
+            function getAvatar(profileId){
+                return `<img src="{{Storage::disk('public')->url('avatars')}}/`+profileId+`.png" `
+                +`onerror="this.onerror=null; this.src='{{Storage::disk('public')->url('avatars/default.png')}}'" `
+                +`width="40" height="40">`;
             }
         </script>
 

@@ -15,7 +15,7 @@ class ProfileController extends Controller
         $this->validate($request, [
             'logged_in' => 'accepted',
             'avatar' => 'image',
-            'avatar' => 'dimensions:width=100,height=100',
+            'avatar' => 'dimensions:ratio=1',
         ]);
 
         $profile = Auth::user()->profile;

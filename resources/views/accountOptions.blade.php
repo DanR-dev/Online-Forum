@@ -5,9 +5,17 @@
         @csrf
         <div><input type="submit" value="logout" class="btn btn-dark btn-block"></div>
     </form>
+    <div>Name : {{Auth::user()->profile->name}}</div>
+    <div>Avatar : 
+        @if(Storage::disk('public')->exists('avatars/'.Auth::user()->profile->id.'.png'))
+            <br><img src="{{Storage::disk('public')->url('avatars/'.Auth::user()->profile->id.'.png')}}" width="60" height="60">
+        @else
+            <br><img src="{{Storage::disk('public')->url('avatars/default.png')}}" width="60" height="60">
+        @endif
+    </div>
     <form method = "POST" enctype="multipart/form-data" action = "/avatar/set">
         @csrf
-        <div><label for="avatar">Set Avatar (must be 100x100 image)</label></div>
+        <div><label for="avatar">Set Avatar:</label></div>
         <div><input id="avatar" name="avatar" type="file" placeholder="Choose image"></div>
         <div><input type="submit" value="Upload" class="btn btn-dark btn-block"></div>
     </form>
