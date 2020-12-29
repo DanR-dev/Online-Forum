@@ -22,7 +22,6 @@ class ProfileController extends Controller
 
         Storage::disk('public')->delete($profile->id.'.png');
         $path = $request->file('avatar')->storePubliclyAs('avatars', $profile->id.'.png', 'public');
-        $profile->avatar_path = $path;
         $profile->save();
         return back();
     }

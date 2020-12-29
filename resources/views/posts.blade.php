@@ -2,23 +2,11 @@
 <html>
 @csrf
 <x-contentLayout>
-    <x-slot name="specificHeader">
-        <form method="POST" action="/posts">
-            @csrf
-            <p>
-                <input id="searchName" type="Search" name="searchName" class="@error('title') is-invalid @enderror">
-                <input type="Submit" value="Search by author" class="btn btn-dark btn-block">
-            </p>
-        </form>
-    </x-slot>
     <x-slot name="title">
         Posts and comments and stuff
     </x-slot>
     <x-slot name="loggedIn">
         {{ $loggedIn }}
-    </x-slot>
-    <x-slot name="currentPage">
-        posts
     </x-slot>
     <x-slot name="content">
         <script>
@@ -110,6 +98,38 @@
                 +"<input type='text' name=content value='"+content+"'></input>"
                 +"<input type='submit' value='Edit'></input>"
                 +"</form>";
+            }
+
+            function genPost(postId, authorId, authorName, title, content){
+                return `<a id="post`+postId+`">`
+                +`<div onclick="placePostOptions('`+postId+`', '`+authorId+`', '`+title+`', '`+content+`')" `
+                +`class="border-dashed rounded-lg p-4">`
+                +`<h3>`
+                +getAvatar(authorId)
+                +`<i>`+authorName+`</i> : `+title+`</h3>`
+                +content
+                +`</div>`
+                +`<p id="optionspost`+postId+`" class="text-blue-600"></p>`
+                +`</a>`;
+            }
+
+            function genComment(commentId, authorId, authorName, content){
+                return `<a id=comment`+commentId+`>`
+                +`<p>`
+                +`<li onclick="placeCommentOptions('`+commentId+`', '`+authorId+`', '`+content+`')" `
+                +`class="border-dashed border-gray-400 list-none rounded-lg p-4">`
+                +getAvatar(authorId)
+                +`<i>`+authorName+`</i> : `+content
+                +`</li>`
+                +`</p>`
+                +`<p id="optionscomment`+commentId+`" class="text-blue-600"></p>`
+                +`</a>`;
+            }
+
+            function getAvatar(profileId){
+                return `<img src="{{Storage::disk('public')->url('avatars')}}/`+profileId+`.png" `
+                +`onerror="this.onerror=null; this.src='{{Storage::disk('public')->url('avatars/default.png')}}'" `
+                +`width="40" height="40">`;
             }
 
             function editPost(postId){
@@ -221,6 +241,7 @@
                         responses = this.responseText.split(">");
                         if(responses.length == 2){
                             document.getElementById("commentsoncomment"+commentId).innerHTML = genComment(responses[0], readerId, readerName, responses[1])
+                            + `<ul id="commentsoncomment`+responses[0]+`"></ul>`
                             + document.getElementById("commentsoncomment"+commentId).innerHTML;
                             document.getElementById(focusId).innerHTML = "";
                             focusId = "";
@@ -240,6 +261,7 @@
                     if (this.readyState == 4 && this.status == 200) {
                         responses = this.responseText.split(">");
                         document.getElementById("posts").innerHTML = genPost(responses[0], readerId, readerName, responses[1], responses[2])
+                        + `<ul id="commentsonpost`+responses[0]+`"></ul>`
                         + document.getElementById("posts").innerHTML;
                     }
                 };
@@ -248,48 +270,28 @@
                 xhttp.send(form);
                 return false;
             }
-
-            function genPost(postId, authorId, authorName, title, content){
-                return `<a id="post`+postId+`">`
-                +`<div onclick="placePostOptions('`+postId+`', '`+authorId+`', '`+title+`', '`+content+`')">`
-                +`<h3>`
-                +getAvatar(authorId)
-                +`<i>`+authorName+`</i> : `+title+`</h3>`
-                +content
-                +`</div>`
-                +`<p id="optionspost`+postId+`"></p>`
-                +`</a>`;
-            }
-
-            function genComment(commentId, authorId, authorName, content){
-                return `<a id=comment`+commentId+`>`
-                +`<p>`
-                +`<li onclick="placeCommentOptions('`+commentId+`', '`+authorId+`', '`+content+`')">`
-                +getAvatar(authorId)
-                +`<i>`+authorName+`</i> : `+content
-                +`</li>`
-                +`</p>`
-                +`<p id="optionscomment`+commentId+`"></p>`
-                +`</a>`;
-            }
-
-            function getAvatar(profileId){
-                return `<img src="{{Storage::disk('public')->url('avatars')}}/`+profileId+`.png" `
-                +`onerror="this.onerror=null; this.src='{{Storage::disk('public')->url('avatars/default.png')}}'" `
-                +`width="40" height="40">`;
-            }
         </script>
 
-        <p>
-            Pages:
-            {{ $posts->links('pagination::bootstrap-4') }}
-        </p>
+        <div>
+            <form method="POST" action="/posts">
+                @csrf
+                <p>
+                    <input id="searchName" type="Search" name="searchName" class="@error('title') is-invalid @enderror">
+                    <input type="Submit" value="Search by author">
+                </p>
+            </form>
+        </div>
 
         <div>
+            Pages:
+            {{ $posts->links('pagination::bootstrap-4') }}
+        </div>
+
+        <div class="border-solid rounded-lg my-4 p-4">
             <h3>Write a new post:</h3>
             <form id="createpost" action="javascript:void(0);" onsubmit="createPost()">
                 @csrf
-                <p>Title</p>
+                <p>Title:</p>
                 <input name="title" type="text"></input>
                 <p>Content:</p>
                 <input name="content" type="text"></input>
@@ -309,5 +311,4 @@
         </p>
     </x-slot>
 </x-contentLayout>
-
 </html>

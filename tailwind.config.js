@@ -6,6 +6,9 @@ module.exports = {
     './resources/**/*.vue',
 ],
   darkMode: false, // or 'media' or 'class'
+  corePlugins: {
+   preflight: false,
+  },
   theme: {
     extend: {},
   },
@@ -13,4 +16,5 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  
 }
