@@ -8,9 +8,9 @@
     <div>Name : {{Auth::user()->profile->name}}</div>
     <div>Avatar : 
         @if(Storage::disk('public')->exists('avatars/'.Auth::user()->profile->id.'.png'))
-            <br><img src="{{Storage::disk('public')->url('avatars/'.Auth::user()->profile->id.'.png')}}" width="60" height="60">
+            <br><img src="{{Storage::disk('public')->url('avatars/'.Auth::user()->profile->id.'.png')}}" width="160" height="160">
         @else
-            <br><img src="{{Storage::disk('public')->url('avatars/default.png')}}" width="60" height="60">
+            <br><img src="{{Storage::disk('public')->url('avatars/default.png')}}" width="160" height="160">
         @endif
     </div>
     <form method = "POST" enctype="multipart/form-data" action = "/avatar/set">
