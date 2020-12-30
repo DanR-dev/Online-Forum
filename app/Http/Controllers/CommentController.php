@@ -6,10 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Profile;
 use App\Models\Comment;
+use App\Events\ItemDeleted;
+use App\Events\ItemCommented;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
+    public $update_target;
 
     public function editComment(Request $request){
         try{
@@ -90,6 +94,11 @@ class CommentController extends Controller
         $comment->commentable_type = $request->request->get('commentable_type');
         $comment->profile_id = Auth::user()->profile->id;
         $comment->save();
+
+        if($comment->profile != $comment->commentable->profile){
+            ItemCommented::dispatch($comment->commentable->profile);
+        }
+
         return $comment->id.">". $comment->content;
     }
 }

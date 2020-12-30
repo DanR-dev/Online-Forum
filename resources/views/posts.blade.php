@@ -9,6 +9,7 @@
         {{ $loggedIn }}
     </x-slot>
     <x-slot name="content">
+
         <script>
             focusId = "";
             readerId = {{$user->profile->id}};
@@ -270,6 +271,14 @@
                 xhttp.send(form);
                 return false;
             }
+            
+            Echo.private(`item_commented.${readerId}`).listen('ItemCommented',(e) => {
+                document.write(e);
+            });
+
+            Echo.private(`item_deleted.${readerId}`).listen('ItemDeleted',(e) => {
+                document.write(e);
+            });
         </script>
 
         <div>

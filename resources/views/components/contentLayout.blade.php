@@ -6,6 +6,7 @@
 </head>
 
 <body>
+    <script src="{{ asset('js/app.js')}}"></script>
     <header>
         <x-header>
             <x-slot name="loggedIn">

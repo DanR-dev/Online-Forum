@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+Broadcast::channel('item_commented.{profileId}', function ($user, $profileId) {
+    return $user->profile->id === $profileId;
+});
+Broadcast::channel('item_deleted.{profileId}', function ($user, $profileId) {
+    return $user->profile->id === $profileId;
+});
