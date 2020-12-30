@@ -9,6 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ItemCommented implements ShouldBroadcast
 {
@@ -33,6 +34,6 @@ class ItemCommented implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('item_commented.'.$this->recipient->id);
+        return new Channel('item-commented-'.$this->recipient->id);
     }
 }

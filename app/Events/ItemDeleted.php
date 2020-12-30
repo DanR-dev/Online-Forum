@@ -33,6 +33,6 @@ class ItemDeleted implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('item_deleted.'.$this->recipient->id);
+        return new Channel('item-deleted-'.$this->recipient->id);
     }
 }

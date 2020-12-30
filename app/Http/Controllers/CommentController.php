@@ -95,9 +95,9 @@ class CommentController extends Controller
         $comment->profile_id = Auth::user()->profile->id;
         $comment->save();
 
-        if($comment->profile != $comment->commentable->profile){
+        //if($comment->profile != $comment->commentable->profile){
             ItemCommented::dispatch($comment->commentable->profile);
-        }
+        //}
 
         return $comment->id.">". $comment->content;
     }

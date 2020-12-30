@@ -272,12 +272,11 @@
                 return false;
             }
             
-            Echo.private(`item_commented.${readerId}`).listen('ItemCommented',(e) => {
-                document.write(e);
+            Echo.channel('item-commented-'+readerId).listen('ItemCommented', (e) => {
+                alert('Someone has commented on your content');
             });
-
-            Echo.private(`item_deleted.${readerId}`).listen('ItemDeleted',(e) => {
-                document.write(e);
+            Echo.channel('item-deleted-'+readerId).listen('ItemDeleted', (e) => {
+                alert('Someone has commented on your content');
             });
         </script>
 
