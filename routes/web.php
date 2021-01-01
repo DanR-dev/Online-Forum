@@ -2,8 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
-use App\Http\Controllers\basicFormController;
-use App\Http\Controllers\loginController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
@@ -31,13 +30,7 @@ Route::post('/comments/edit', [CommentController::class, 'editComment']);
 Route::post('/comments/delete', [CommentController::class, 'deleteComment']);
 Route::post('/comments/create', [CommentController::class, 'createComment']);
 
-Route::get('/createForm', [basicFormController::class, 'createForm']);
-Route::post('/createForm', [basicFormController::class, 'processCreateForm']);
-
-Route::get('/editForm', [basicFormController::class, 'editForm']);
-Route::put('/editForm', [basicFormController::class, 'processEditForm']);
-
-Route::get('/login', [loginController::class, 'getLoginForm'])->withoutMiddleware(App\Http\Middleware\Authenticate::class)->name('login');
-Route::post('/login', [loginController::class, 'processLogin'])->withoutMiddleware(App\Http\Middleware\Authenticate::class);
-Route::post('/logout', [loginController::class, 'processLogout']);
+Route::get('/login', [LoginController::class, 'getAccountOptionsView'])->withoutMiddleware(App\Http\Middleware\Authenticate::class)->name('login');
+Route::post('/login', [LoginController::class, 'processLoginRequest'])->withoutMiddleware(App\Http\Middleware\Authenticate::class);
+Route::post('/logout', [LoginController::class, 'processLogoutRequest']);
 Route::post('/avatar/set', [ProfileController::class, 'setAvatar']);

@@ -22,19 +22,19 @@ class ProfileSeeder extends Seeder
         $roleB = Role::find(2);
         $roleC = Role::find(3);
 
-        $profileA = new Profile;
-        $profileA->name = 'Alex';
-        $profileA->user_id = $userA->id;
-        $profileA->auth = 'admin';
-        $profileA->save();
-        $profileA->roles()->attach($roleA);
-        $profileA->roles()->attach($roleB);
+        $profile = new Profile;
+        $profile->name = 'Alex';
+        $profile->user_id = $userA->id;
+        $profile->auth = 'admin';
+        $profile->save();
+        $profile->roles()->attach($roleA);
+        $profile->roles()->attach($roleB);
         
-        $profileB = new Profile;
-        $profileB->name = 'Bob';
-        $profileB->user_id = $userB->id;
-        $profileB->save();
-        $profileB->roles()->attach($roleC);
+        $profile = new Profile;
+        $profile->name = 'Bob';
+        $profile->user_id = $userB->id;
+        $profile->save();
+        $profile->roles()->attach($roleC);
 
         
         foreach(Profile::factory(50)->create() as &$profile)

@@ -9,7 +9,6 @@ use App\Models\Comment;
 use App\Events\ItemDeleted;
 use App\Events\ItemCommented;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {

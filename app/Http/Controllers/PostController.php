@@ -11,8 +11,8 @@ class PostController extends Controller
 {
     public function getPosts(Request $request){
         try{
-            $searchName = $request->only('searchName');
-            $posts = Post::where('profile_id', Profile::where('name', $searchName)->first()->id)->paginate(10);
+            $search_name = $request->only('searchName');
+            $posts = Post::where('profile_id', Profile::where('name', $search_name)->first()->id)->paginate(10);
         }
         catch(\Exception $e){
             $posts = Post::paginate(10);
@@ -48,7 +48,11 @@ class PostController extends Controller
             $post->save();
             return $post->id.">". $post->title .">". $post->content;
 
-        }catch(\Exception $e){}
+        }catch(\Exception $e){
+            return back()->withErrors([
+                'credentials' => 'Some of the required data is missing',
+            ]);
+        }
     }
 
     public function deletePost(Request $request){
@@ -73,26 +77,35 @@ class PostController extends Controller
             return "True";
 
         }catch(\Exception $e){
-            
+            return back()->withErrors([
+                'credentials' => 'Some of the required data is missing',
+            ]);
         }
     }
 
     public function createPost(Request $request){
-        $request->request->add(['title' => strip_tags($request->title)]);
-        $request->request->add(['content' => strip_tags($request->content)]);
-        $request->request->add(['authorised' => Auth::check()]);
 
-        $this->validate($request, [
-            'title' => 'required',
-            'content' => 'required',
-            'authorised' => 'accepted',
-        ]);
+        try{
+            $request->request->add(['title' => strip_tags($request->title)]);
+            $request->request->add(['content' => strip_tags($request->content)]);
+            $request->request->add(['authorised' => Auth::check()]);
 
-        $post = new Post;
-        $post->title = $request->request->get('title');
-        $post->content = $request->request->get('content');
-        $post->profile_id = Auth::user()->profile->id;
-        $post->save();
-        return $post->id.">". $post->title .">". $post->content;
+            $this->validate($request, [
+                'title' => 'required',
+                'content' => 'required',
+                'authorised' => 'accepted',
+            ]);
+
+            $post = new Post;
+            $post->title = $request->request->get('title');
+            $post->content = $request->request->get('content');
+            $post->profile_id = Auth::user()->profile->id;
+            $post->save();
+            return $post->id.">". $post->title .">". $post->content;
+        } catch(\Exception $e){
+            return back()->withErrors([
+                'credentials' => 'Some of the required data is missing',
+            ]);
+        }
     }
 }

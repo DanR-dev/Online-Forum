@@ -27,7 +27,7 @@
             </div>
             <form method = "POST" enctype="multipart/form-data" action = "/avatar/set">
                 @csrf
-                 <div><label for="avatar">Set Avatar:</label></div>
+                <div><label for="avatar">Set Avatar: (must be 1:1 ratio)</label></div>
                 <div><input id="avatar" name="avatar" type="file" placeholder="Choose image"></div>
                 <div><input type="submit" value="Upload" class="btn btn-dark btn-block"></div>
             </form>

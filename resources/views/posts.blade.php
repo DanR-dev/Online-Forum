@@ -10,6 +10,44 @@
     </x-slot>
     <x-slot name="content">
 
+        <div>
+            <form method="POST" action="/posts">
+                @csrf
+                <p>
+                    <input id="searchName" type="Search" name="searchName" class="@error('title') is-invalid @enderror">
+                    <input type="Submit" value="Search by author">
+                </p>
+            </form>
+        </div>
+
+        <div>
+            Pages:
+            {{ $posts->links('pagination::bootstrap-4') }}
+        </div>
+
+        <div class="border-solid rounded-lg my-4 p-4">
+            <h3>Write a new post:</h3>
+            <form id="createpost" action="javascript:void(0);" onsubmit="createPost()">
+                @csrf
+                <p>Title:</p>
+                <input name="title" type="text"></input>
+                <p>Content:</p>
+                <input name="content" type="text"></input>
+                <input type="submit" value="Post"></input>
+            </form>
+        </div>
+    
+        <a id="posts">
+        @foreach ($posts as $post)
+            @include('components/post', ['post' => $post])
+        @endforeach
+        </a>
+
+        <p>
+            Pages:
+            {{ $posts->links('pagination::bootstrap-4') }}
+        </p>
+        
         <script>
             focusId = "";
             readerId = {{$user->profile->id}};
@@ -292,44 +330,6 @@
                 alert('An admin has deleted some of your content');
             });
         </script>
-
-        <div>
-            <form method="POST" action="/posts">
-                @csrf
-                <p>
-                    <input id="searchName" type="Search" name="searchName" class="@error('title') is-invalid @enderror">
-                    <input type="Submit" value="Search by author">
-                </p>
-            </form>
-        </div>
-
-        <div>
-            Pages:
-            {{ $posts->links('pagination::bootstrap-4') }}
-        </div>
-
-        <div class="border-solid rounded-lg my-4 p-4">
-            <h3>Write a new post:</h3>
-            <form id="createpost" action="javascript:void(0);" onsubmit="createPost()">
-                @csrf
-                <p>Title:</p>
-                <input name="title" type="text"></input>
-                <p>Content:</p>
-                <input name="content" type="text"></input>
-                <input type="submit" value="Post"></input>
-            </form>
-        </div>
-    
-        <a id="posts">
-        @foreach ($posts as $post)
-            @include('components/post', ['post' => $post])
-        @endforeach
-        </a>
-
-        <p>
-            Pages:
-            {{ $posts->links('pagination::bootstrap-4') }}
-        </p>
     </x-slot>
 </x-contentLayout>
 </html>

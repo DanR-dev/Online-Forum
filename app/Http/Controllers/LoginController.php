@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class loginController extends Controller
+class LoginController extends Controller
 {
 
-    public function getLoginForm(Request $request){
+    public function getAccountOptionsView(Request $request){
         return view('accountOptions', ['loggedIn' => Auth::check()]);
     }
 
-    public function processLogin(Request $request)
+    public function processLoginRequest(Request $request)
     {
         $credentials = $request->only('email', 'password');
     
@@ -20,16 +20,17 @@ class loginController extends Controller
             $request->session()->regenerate();
     
             return redirect()->intended('/');
+        } else{
+            return back()->withErrors([
+                'credentials' => 'The provided credentials do not match our records.',
+            ]);
         }
-    
-        return back()->withErrors([
-            'credentials' => 'The provided credentials do not match our records.',
-        ]);
     }
 
-    public function processLogout(Request $request)
+    public function processLogoutRequest(Request $request)
     {
         Auth::logout();
+        $request->session()->regenerate();
         return back();
     }
 }
