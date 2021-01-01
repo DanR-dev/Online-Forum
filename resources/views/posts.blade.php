@@ -3,7 +3,7 @@
 @csrf
 <x-contentLayout>
     <x-slot name="title">
-        Posts and comments and stuff
+        The Place of Learning
     </x-slot>
     <x-slot name="loggedIn">
         {{ $loggedIn }}
@@ -144,6 +144,8 @@
                             document.getElementById("post"+postId).outerHTML = genPost(responses[0], readerId, readerName, responses[1], responses[2]);
                             document.getElementById(focusId).innerHTML = "";
                             focusId = "";
+                        } else{
+                            alert("The new content and title of your post cannot be blank (HTML tags will be ignored)");
                         }
                     }
                 };
@@ -159,10 +161,14 @@
                 form.append("comment_id", commentId);
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        responses = this.responseText.split(">");
-                        document.getElementById("comment"+commentId).outerHTML = genComment(responses[0], readerId, readerName, responses[1]);
-                        document.getElementById(focusId).innerHTML = "";
-                        focusId = "";
+                        if(responses.length == 2){
+                            responses = this.responseText.split(">");
+                            document.getElementById("comment"+commentId).outerHTML = genComment(responses[0], readerId, readerName, responses[1]);
+                            document.getElementById(focusId).innerHTML = "";
+                            focusId = "";
+                        } else{
+                            alert("The new content of your comment cannot be blank (HTML tags will be ignored)");
+                        }
                     }
                 };
                 xhttp.open("POST", "comments/edit", true);
@@ -177,13 +183,12 @@
                 form.append("post_id", postId);
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
+                        focusId = "";
                         if(this.responseText == 'True'){
                             document.getElementById("post"+postId).outerHTML = null;
-                            document.getElementById("commentsonpost"+postId).outerHTML = null;
                         } else{
-                            document.write("delete error occured");
+                            alert("Something went wrong when deleting this post");
                         }
-                        focusId = "";
                     }
                 };
                 xhttp.open("POST", "posts/delete", true);
@@ -198,14 +203,12 @@
                 form.append('comment_id', commentId);
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
+                        focusId = "";
                         if(this.responseText == 'True'){
                             document.getElementById("comment"+commentId).outerHTML = null;
-                            document.getElementById("commentsoncomment"+commentId).outerHTML = null;
                         } else{
-                            document.write("delete error occured");
-                            document.getElementById(focusId).innerHTML = "";
+                            alert("Something went wrong when deleting this comment");
                         }
-                        focusId = "";
                     }
                 };
                 xhttp.open("POST", "comments/delete", true);
@@ -221,10 +224,14 @@
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         responses = this.responseText.split(">");
-                        document.getElementById("commentsonpost"+postId).innerHTML = genComment(responses[0], readerId, readerName, responses[1])
-                        + document.getElementById("commentsonpost"+postId).innerHTML;
-                        document.getElementById(focusId).innerHTML = "";
-                        focusId = "";
+                        if(responses.length == 2){
+                            document.getElementById("commentsonpost"+postId).innerHTML = genComment(responses[0], readerId, readerName, responses[1])
+                            + document.getElementById("commentsonpost"+postId).innerHTML;
+                            document.getElementById(focusId).innerHTML = "";
+                            focusId = "";
+                        } else{
+                            alert("The content of your comment cannot be blank (HTML tags will be ignored)");
+                        }
                     }
                 };
                 xhttp.open("POST", "comments/create", true);
@@ -246,6 +253,8 @@
                             + document.getElementById("commentsoncomment"+commentId).innerHTML;
                             document.getElementById(focusId).innerHTML = "";
                             focusId = "";
+                        } else{
+                            alert("The content of your comment cannot be blank (HTML tags will be ignored)");
                         }
                     }
                 };
@@ -261,9 +270,13 @@
                 xhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         responses = this.responseText.split(">");
-                        document.getElementById("posts").innerHTML = genPost(responses[0], readerId, readerName, responses[1], responses[2])
-                        + `<ul id="commentsonpost`+responses[0]+`"></ul>`
-                        + document.getElementById("posts").innerHTML;
+                        if(responses.length == 3){
+                            document.getElementById("posts").innerHTML = genPost(responses[0], readerId, readerName, responses[1], responses[2])
+                            + `<ul id="commentsonpost`+responses[0]+`"></ul>`
+                            + document.getElementById("posts").innerHTML;
+                        } else{
+                            alert("The title and content of your post cannot be blank (HTML tags will be ignored)");
+                        }
                     }
                 };
                 xhttp.open("POST", "posts/create", true);
@@ -276,7 +289,7 @@
                 alert('Someone has commented on your content');
             });
             Echo.channel('item-deleted-'+readerId).listen('ItemDeleted', (e) => {
-                alert('Someone has commented on your content');
+                alert('An admin has deleted some of your content');
             });
         </script>
 

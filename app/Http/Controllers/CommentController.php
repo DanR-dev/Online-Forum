@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
-    public $update_target;
 
     public function editComment(Request $request){
         try{
@@ -62,6 +61,10 @@ class CommentController extends Controller
             $this->validate($request, [
                 'authorised' => 'accepted',
             ]);
+            
+            if($comment->profile != $profile){
+                ItemDeleted::dispatch($comment->commentable->profile);
+            }
 
             $comment->delete();
             return "True";
@@ -93,11 +96,12 @@ class CommentController extends Controller
         $comment->commentable_id = $request->request->get('commentable_id');
         $comment->commentable_type = $request->request->get('commentable_type');
         $comment->profile_id = Auth::user()->profile->id;
-        $comment->save();
 
-        //if($comment->profile != $comment->commentable->profile){
+        if($comment->profile != $comment->commentable->profile){
             ItemCommented::dispatch($comment->commentable->profile);
-        //}
+        }
+
+        $comment->save();
 
         return $comment->id.">". $comment->content;
     }
