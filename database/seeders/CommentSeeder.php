@@ -35,6 +35,7 @@ class CommentSeeder extends Seeder
         $reply->save();
 
         Comment::factory(30)->create();
+        // these 50 can now be commented on the previous 30
         Comment::factory(50)->create();
     }
 }

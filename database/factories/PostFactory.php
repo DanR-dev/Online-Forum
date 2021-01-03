@@ -22,11 +22,12 @@ class PostFactory extends Factory
      */
     public function definition()
     {
-        $profiles = Profile::all();
+        // randomly pick an author
+        $profile = Profile::get()->random();
         return [
             'title' => $this->faker->text(20),
             'content' => $this->faker->text(200),
-            'profile_id' => $profiles->random(),
+            'profile_id' => $profile,
         ];
     }
 }

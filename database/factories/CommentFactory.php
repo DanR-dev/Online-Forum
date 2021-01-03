@@ -23,7 +23,9 @@ class CommentFactory extends Factory
      */
     public function definition()
     {
+        //randomly pick an author
         $profiles = Profile::get()->random();
+        //randomly pick a post OR comment to comment on
         if(mt_rand(0, 1) == 0){
             $commentable = Comment::get()->random();
         } else{

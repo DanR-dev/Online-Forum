@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 @csrf
-@extends('app')
 <x-contentLayout>
     <x-slot name="title">
         Account Options
@@ -11,13 +10,16 @@
     </x-slot>
     <x-slot name="content">
         @if($loggedIn == True)
+            {{-- Logout form --}}
             <form method = "POST" action = "/logout">
                 @csrf
                 <div><input type="submit" value="logout" class="btn btn-dark btn-block"></div>
             </form>
+            {{-- User details --}}
             <div>Name : {{Auth::user()->profile->name}}</div>
             <div>Email : {{Auth::user()->email}}</div>
             <div>
+                {{-- User avatar (or default) --}}
                 Avatar : 
                 @if(Storage::disk('public')->exists('avatars/'.Auth::user()->profile->id.'.png'))
                     <br><img src="{{Storage::disk('public')->url('avatars/'.Auth::user()->profile->id.'.png')}}" width="160" height="160">
@@ -25,6 +27,7 @@
                     <br><img src="{{Storage::disk('public')->url('avatars/default.png')}}" width="160" height="160">
                 @endif
             </div>
+            {{-- Set avatar form --}}
             <form method = "POST" enctype="multipart/form-data" action = "/avatar/set">
                 @csrf
                 <div><label for="avatar">Set Avatar: (must be 1:1 ratio)</label></div>
@@ -32,6 +35,7 @@
                 <div><input type="submit" value="Upload" class="btn btn-dark btn-block"></div>
             </form>
         @else
+            {{-- User login form --}}
             <form method = "POST" action = "/login">
                 @csrf
                 <div><label for="email">Email</label></div>
@@ -42,6 +46,7 @@
             </form>
         @endif
 
+        {{-- List any errors from form submission --}}
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>

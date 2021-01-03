@@ -22,7 +22,8 @@ class ProfileFactory extends Factory
      */
     public function definition()
     {
-        $user = User::all()->random();
+        // randomly pick a user
+        $user = User::get()->random();
         return [
             'name' => $this->faker->firstName,
             'user_id' => $user,

@@ -9,8 +9,10 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
+/**
+ * event of an administrator deleting someone elses comment or post, used for broadcasting only.
+ */
 class ItemDeleted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -19,7 +21,7 @@ class ItemDeleted implements ShouldBroadcast
 
     /**
      * Create a new event instance.
-     *
+     * @param $recipient profile of author of item being deleted
      * @return void
      */
     public function __construct($recipient)
@@ -35,5 +37,7 @@ class ItemDeleted implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel('item-deleted-'.$this->recipient->id);
+        // eg item-commented-3
+        // intended for profile with id = 3
     }
 }

@@ -10,15 +10,18 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * event of a user writing a comment, used for broadcasting only.
+ */
 class ItemCommented implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $recipient;
+    public $recipient; 
 
     /**
      * Create a new event instance.
-     *
+     * @param $recipient profile of author of item being commented on
      * @return void
      */
     public function __construct($recipient)
@@ -34,5 +37,7 @@ class ItemCommented implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel('item-commented-'.$this->recipient->id);
+        // eg item-commented-3
+        // intended for profile with id = 3
     }
 }
