@@ -25493,7 +25493,8 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
   key: "2fd7b5bc4ccc94d282e5",
   cluster: "eu",
-  forceTLS: true
+  forceTLS: true,
+  encrypted: true
 });
 
 /***/ }),
@@ -25505,8 +25506,8 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\danpr\Laravel+Homestead\Code\coursework2\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\danpr\Laravel+Homestead\Code\coursework2\resources\css\app.css */"./resources/css/app.css");
+__webpack_require__(/*! /home/vagrant/code/coursework2/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/vagrant/code/coursework2/resources/css/app.css */"./resources/css/app.css");
 
 
 /***/ })

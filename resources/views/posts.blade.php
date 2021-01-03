@@ -9,44 +9,6 @@
         {{ $loggedIn }}
     </x-slot>
     <x-slot name="content">
-
-        <div>
-            <form method="POST" action="/posts">
-                @csrf
-                <p>
-                    <input id="searchName" type="Search" name="searchName" class="@error('title') is-invalid @enderror">
-                    <input type="Submit" value="Search by author">
-                </p>
-            </form>
-        </div>
-
-        <div>
-            Pages:
-            {{ $posts->links('pagination::bootstrap-4') }}
-        </div>
-
-        <div class="border-solid rounded-lg my-4 p-4">
-            <h3>Write a new post:</h3>
-            <form id="createpost" action="javascript:void(0);" onsubmit="createPost()">
-                @csrf
-                <p>Title:</p>
-                <input name="title" type="text"></input>
-                <p>Content:</p>
-                <input name="content" type="text"></input>
-                <input type="submit" value="Post"></input>
-            </form>
-        </div>
-    
-        <a id="posts">
-        @foreach ($posts as $post)
-            @include('components/post', ['post' => $post])
-        @endforeach
-        </a>
-
-        <p>
-            Pages:
-            {{ $posts->links('pagination::bootstrap-4') }}
-        </p>
         
         <script>
             focusId = "";
@@ -114,7 +76,7 @@
             function placeCommentOnCommentInput(commentId){
                 document.getElementById("optionscomment"+commentId).innerHTML = 
                 `<form id=formcomment`+commentId+` action='javascript:void(0);'  onsubmit="createCommentOnComment('`+commentId+`')">`
-                    +`@csrf`
+                +`@csrf`
                 +`<input type='text' name='content'></input>`
                 +`<input type='submit' value='Reply'></input>`
                 +`</form>`;
@@ -264,6 +226,7 @@
                         responses = this.responseText.split(">");
                         if(responses.length == 2){
                             document.getElementById("commentsonpost"+postId).innerHTML = genComment(responses[0], readerId, readerName, responses[1])
+                            + `<ul id="commentsoncomment`+responses[0]+`"></ul>`
                             + document.getElementById("commentsonpost"+postId).innerHTML;
                             document.getElementById(focusId).innerHTML = "";
                             focusId = "";
@@ -330,6 +293,45 @@
                 alert('An admin has deleted some of your content');
             });
         </script>
+        
+        <div>
+            <form method="POST" action="/posts">
+                @csrf
+                <p>
+                    <input id="searchName" type="Search" name="searchName" class="@error('title') is-invalid @enderror">
+                    <input type="Submit" value="Search by author">
+                </p>
+            </form>
+        </div>
+
+        <div>
+            Pages:
+            {{ $posts->links('pagination::bootstrap-4') }}
+        </div>
+
+        <div class="border-solid rounded-lg my-4 p-4">
+            <h3>Write a new post:</h3>
+            <form id="createpost" action="javascript:void(0);" onsubmit="createPost()">
+                @csrf
+                <p>Title:</p>
+                <input name="title" type="text"></input>
+                <p>Content:</p>
+                <input name="content" type="text"></input>
+                <input type="submit" value="Post"></input>
+            </form>
+        </div>
+    
+        <a id="posts">
+        @foreach ($posts as $post)
+            @include('components/post', ['post' => $post])
+        @endforeach
+        </a>
+
+        <p>
+            Pages:
+            {{ $posts->links('pagination::bootstrap-4') }}
+        </p>
+        
     </x-slot>
 </x-contentLayout>
 </html>

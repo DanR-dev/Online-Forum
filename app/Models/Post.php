@@ -20,12 +20,12 @@ class Post extends Model
         'content',
     ];
 
-    public function profile()
+    public function profile() // was written by exactly one profile
     {
         return $this->belongsTo('App\Models\Profile');
     }
     
-    public function comments()
+    public function comments() // has recieved any number of comments (polymorphic)
     {
         return $this->morphMany('App\Models\Comment', 'commentable');
     }

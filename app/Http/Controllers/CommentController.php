@@ -29,7 +29,6 @@ class CommentController extends Controller
             $author = $comment->profile;
             $request->request->add(['authorised' => ($profile->auth == 'admin' || $profile == $author)]);
             
-            
             $this->validate($request, [
                 'authorised' => 'accepted',
             ]);
@@ -61,8 +60,8 @@ class CommentController extends Controller
                 'authorised' => 'accepted',
             ]);
             
-            if($comment->profile != $profile){
-                ItemDeleted::dispatch($comment->commentable->profile);
+            if($comment->profile->id != $profile->id){
+                ItemDeleted::dispatch($comment->profile);
             }
 
             $comment->delete();

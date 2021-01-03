@@ -9,7 +9,7 @@ class Role extends Model
 {
     use HasFactory;
 
-    public function profiles()
+    public function profiles() // is held by any number of profiles
     {
         return $this->belongsToMany('App\Models\Profile');
     }

@@ -18,11 +18,7 @@ class ProfileController extends Controller
             'avatar' => 'dimensions:ratio=1',
         ]);
 
-        $profile = Auth::user()->profile;
-
-        Storage::disk('public')->delete($profile->id.'.png');
-        $path = $request->file('avatar')->storePubliclyAs('avatars', $profile->id.'.png', 'public');
-        $profile->save();
+        $request->file('avatar')->storePubliclyAs('avatars', Auth::user()->profile->id.'.png', 'public');
         return back();
     }
 }

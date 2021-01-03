@@ -10,17 +10,17 @@ class Comment extends Model
 {
     use HasFactory;
 
-    public function profile()
+    public function profile() // was written by exactly one profile
     {
         return $this->belongsTo('App\Models\Profile');
     }
 
-    public function commentable()
+    public function commentable() // is a comment on exactly one comment OR one post (polymorphic)
     {
         return $this->morphTo();
     }
     
-    public function comments()
+    public function comments() // has recieved any number of comments (polymorphic)
     {
         return $this->morphMany('App\Models\Comment', 'commentable');
     }

@@ -40,7 +40,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function profile()
+    public function profile() // has exactly 1 profile
     {
         return $this->hasOne('App\Models\Profile');
     }
